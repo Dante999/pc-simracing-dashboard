@@ -20,7 +20,8 @@ SOURCES += \
     configuration.cpp \
     game.cpp \
     serialcom.cpp \
-    pcars/pcars.cpp
+    pcars/pcars.cpp \
+    menue.cpp
 
 HEADERS += \
     protocol.h \
@@ -29,7 +30,8 @@ HEADERS += \
     gamedata.h \
     serialcom.h \
     pcars/pcars.h \
-    pcars/pcarssharedmemory.h
+    pcars/pcarssharedmemory.h \
+    menue.h
 
 
 SUBDIRS += \

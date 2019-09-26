@@ -4,6 +4,15 @@
 
 #include <stdint.h>
 
+enum selectedGame
+{
+    GAME_PCARS = 0,
+
+    // ------------
+
+};
+
+
 
 
 // Tyres
