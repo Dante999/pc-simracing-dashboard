@@ -35,9 +35,11 @@ int main(int argc, char *argv[])
     }
 
 
-    Configuration config(configfilename);
+    Configuration::load(configfilename);
+    Configuration::printConfiguration();
+    //Configuration config(configfilename);
 
-    config.initialize();
+    //config.initialize();
 
     return a.exec();
 }

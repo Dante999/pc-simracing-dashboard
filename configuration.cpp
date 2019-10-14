@@ -3,17 +3,42 @@
 #include <QTextStream>
 #include <QDebug>
 
+/*
+ * initialize static class members
+ */
+QString Configuration::m_filename = "";
+QMap<QString, QString> Configuration::m_configMap;
 
-Configuration::Configuration(QString filename)
+
+
+
+Configuration::Configuration()
 {
-    m_filename = filename;
+    // nothing to do
 }
 
 
 
 
-bool Configuration::initialize()
+void Configuration::printConfiguration()
 {
+    QMapIterator<QString, QString> iter(m_configMap);
+
+    qDebug() << "------------------------";
+    qDebug() << "| configuration values |";
+    qDebug() << "------------------------";
+
+    while(iter.hasNext())
+    {
+        iter.next();
+        qDebug() << iter.key() << " : " << iter.value();
+    }
+}
+
+bool Configuration::load(QString filename)
+{
+    m_filename = filename;
+
     QFile configurationFile(m_filename);
 
     if( !configurationFile.open(QIODevice::ReadOnly | QIODevice::Text) )
@@ -89,7 +114,6 @@ void Configuration::parseLine(QString line)
 
     m_configMap.insert(key, value);
 
-
-    qDebug() << "configline:" << key << "=" << value;
+    //qDebug() << "configline:" << key << "=" << value;
 }
 

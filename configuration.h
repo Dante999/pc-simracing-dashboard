@@ -9,19 +9,20 @@ class Configuration
 {
 
 public:
-    Configuration(QString filename);
-    bool initialize();
-    bool containsValue(QString key);
-    int getValueAsInt(QString key, bool *ok = nullptr);
-    QString getValueAsString(QString key, bool *ok);
+    static void printConfiguration();
+    static bool load(QString filename);
+    static bool containsValue(QString key);
+    static int getValueAsInt(QString key, bool *ok = nullptr);
+    static QString getValueAsString(QString key, bool *ok);
 
 
 private:
-    void parseLine(QString line);
+    Configuration();
+    static void parseLine(QString line);
 
 private:
-    QString m_filename;
-    QMap<QString, QString> m_configMap;
+    static QString m_filename;
+    static QMap<QString, QString> m_configMap;
 
 };
 
