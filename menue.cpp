@@ -29,9 +29,9 @@ selectedGame Menue::askForGame()
     switch (c) {
 
     case '0':
-        return GAME_PCARS;
+        return eGAME_PCARS;
         break;
     default:
-        break;
+        return eGAME_UNKNOWN;
     }
 }

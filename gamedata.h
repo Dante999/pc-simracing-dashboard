@@ -4,12 +4,14 @@
 
 #include <stdint.h>
 
+#define VERSION 1
+
 enum selectedGame
 {
-    GAME_PCARS = 0,
-
+    eGAME_UNKNOWN = 0,
+    eGAME_DEMO,
+    eGAME_PCARS
     // ------------
-
 };
 
 
@@ -54,6 +56,9 @@ enum
 
 typedef struct
 {
+    uint8_t version = VERSION;
+    uint8_t gameType;
+
     int8_t gear;                            // [ UNITS = NONE ]     [ RANGE = -128 -> +127 ]
     int8_t maxGear;                         // [ UNITS = NONE ]     [ RANGE = -128 -> +127 ]
     uint16_t rpm;                           // [ UNITS = rpm  ]     [ RANGE = 0 -> 65535 ]
