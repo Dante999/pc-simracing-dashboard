@@ -7,7 +7,7 @@ class GameDemo : public Game
 {
 public:
     GameDemo();
-    bool writeDataTo(gameDataStruct *gameData);
+    bool writeDataTo(struct gamedata *data);
     bool isRunning();
 };
 

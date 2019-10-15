@@ -15,7 +15,7 @@ private:
 public:
     Pcars();
 
-    bool writeDataTo(gameDataStruct *gameData);
+    bool writeDataTo(struct gamedata *data);
     bool isRunning();
 
 

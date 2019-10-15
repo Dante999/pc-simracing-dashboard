@@ -8,7 +8,7 @@ class Game
 public:
     Game();
     virtual  ~Game();
-    virtual bool writeDataTo(gameDataStruct *gameData) = 0;
+    virtual bool writeDataTo(struct gamedata *data) = 0;
     virtual bool isRunning() = 0;
 };
 

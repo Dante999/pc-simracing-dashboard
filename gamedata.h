@@ -54,7 +54,7 @@ enum
   eCAR_HANDBRAKE         = (1<<5),
 };
 
-typedef struct
+struct gamedata
 {
     uint8_t version = VERSION;
     uint8_t gameType;
@@ -95,7 +95,7 @@ typedef struct
     float timeSplitAhead;
     float timeSplitBehind;
 
-} gameDataStruct;
+};
 
 
 

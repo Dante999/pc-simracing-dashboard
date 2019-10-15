@@ -5,9 +5,9 @@ GameDemo::GameDemo()
 
 }
 
-bool GameDemo::writeDataTo(gameDataStruct *gameData)
+bool GameDemo::writeDataTo(gamedata *data)
 {
-    gameData->gameType = eGAME_DEMO;
+    data->gameType = eGAME_DEMO;
 
     return true;
 }

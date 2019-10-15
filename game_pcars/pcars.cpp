@@ -12,57 +12,57 @@ Pcars::Pcars()
     m_pcarsData = reinterpret_cast<MemoryMap_Pcars*> (m_sharedMemory.data());
 }
 
-bool Pcars::writeDataTo(gameDataStruct *gameData)
+bool Pcars::writeDataTo(gamedata *data)
 {
     if(!isRunning()) return false;
 
     ParticipantInfo *racerInfo = m_pcarsData->mParticipantInfo;
 
-    gameData->racePosition = racerInfo->mRacePosition;
+    data->racePosition = racerInfo->mRacePosition;
 
-    gameData->gear          = (uint8_t) m_pcarsData->mGear;
-    gameData->rpm           = m_pcarsData->mRpm;
-    gameData->maxRpm        = m_pcarsData->mMaxRPM;
-    gameData->speed         = (m_pcarsData->mSpeed * 3.6);
-    gameData->fuelLevel     = (m_pcarsData->mFuelLevel * m_pcarsData->mFuelCapacity);
-    gameData->fuelCapacity  = m_pcarsData->mFuelCapacity;
+    data->gear          = (uint8_t) m_pcarsData->mGear;
+    data->rpm           = m_pcarsData->mRpm;
+    data->maxRpm        = m_pcarsData->mMaxRPM;
+    data->speed         = (m_pcarsData->mSpeed * 3.6);
+    data->fuelLevel     = (m_pcarsData->mFuelLevel * m_pcarsData->mFuelCapacity);
+    data->fuelCapacity  = m_pcarsData->mFuelCapacity;
 
-    gameData->tempOil                       = m_pcarsData->mOilTempCelsius;
-    gameData->tempWater                     = m_pcarsData->mWaterTempCelsius;
-    gameData->tempBrake[eTYRE_FRONT_LEFT]   = m_pcarsData->mBrakeTempCelsius[TYRE_FRONT_LEFT];
-    gameData->tempBrake[eTYRE_FRONT_RIGHT]  = m_pcarsData->mBrakeTempCelsius[TYRE_FRONT_RIGHT];
-    gameData->tempBrake[eTYRE_REAR_LEFT]    = m_pcarsData->mBrakeTempCelsius[TYRE_REAR_LEFT];
-    gameData->tempBrake[eTYRE_REAR_RIGHT]   = m_pcarsData->mBrakeTempCelsius[TYRE_REAR_RIGHT];
-    gameData->tempTyre[eTYRE_FRONT_LEFT]    = m_pcarsData->mTyreTemp[TYRE_FRONT_LEFT];
-    gameData->tempTyre[eTYRE_FRONT_RIGHT]   = m_pcarsData->mTyreTemp[TYRE_FRONT_RIGHT];
-    gameData->tempTyre[eTYRE_REAR_LEFT]     = m_pcarsData->mTyreTemp[TYRE_REAR_LEFT];
-    gameData->tempTyre[eTYRE_REAR_RIGHT]    = m_pcarsData->mTyreTemp[TYRE_REAR_RIGHT];
+    data->tempOil                       = m_pcarsData->mOilTempCelsius;
+    data->tempWater                     = m_pcarsData->mWaterTempCelsius;
+    data->tempBrake[eTYRE_FRONT_LEFT]   = m_pcarsData->mBrakeTempCelsius[TYRE_FRONT_LEFT];
+    data->tempBrake[eTYRE_FRONT_RIGHT]  = m_pcarsData->mBrakeTempCelsius[TYRE_FRONT_RIGHT];
+    data->tempBrake[eTYRE_REAR_LEFT]    = m_pcarsData->mBrakeTempCelsius[TYRE_REAR_LEFT];
+    data->tempBrake[eTYRE_REAR_RIGHT]   = m_pcarsData->mBrakeTempCelsius[TYRE_REAR_RIGHT];
+    data->tempTyre[eTYRE_FRONT_LEFT]    = m_pcarsData->mTyreTemp[TYRE_FRONT_LEFT];
+    data->tempTyre[eTYRE_FRONT_RIGHT]   = m_pcarsData->mTyreTemp[TYRE_FRONT_RIGHT];
+    data->tempTyre[eTYRE_REAR_LEFT]     = m_pcarsData->mTyreTemp[TYRE_REAR_LEFT];
+    data->tempTyre[eTYRE_REAR_RIGHT]    = m_pcarsData->mTyreTemp[TYRE_REAR_RIGHT];
 
-    gameData->damageAero                            = m_pcarsData->mAeroDamage * 100;
-    gameData->damageEngine                          = m_pcarsData->mEngineDamage * 100;
-    gameData->damageBrake[eTYRE_FRONT_LEFT]         = m_pcarsData->mBrakeDamage[TYRE_FRONT_LEFT] * 100;
-    gameData->damageBrake[eTYRE_FRONT_RIGHT]        = m_pcarsData->mBrakeDamage[TYRE_FRONT_RIGHT] * 100;
-    gameData->damageBrake[eTYRE_REAR_LEFT]          = m_pcarsData->mBrakeDamage[TYRE_REAR_LEFT] * 100;
-    gameData->damageBrake[eTYRE_REAR_RIGHT]         = m_pcarsData->mBrakeDamage[TYRE_REAR_RIGHT] * 100;
-    gameData->damageSuspension[eTYRE_FRONT_LEFT]    = m_pcarsData->mSuspensionDamage[TYRE_FRONT_LEFT] * 100;
-    gameData->damageSuspension[eTYRE_FRONT_RIGHT]   = m_pcarsData->mSuspensionDamage[TYRE_FRONT_RIGHT] * 100;
-    gameData->damageSuspension[eTYRE_REAR_LEFT]     = m_pcarsData->mSuspensionDamage[TYRE_REAR_LEFT] * 100;
-    gameData->damageSuspension[eTYRE_REAR_RIGHT]    = m_pcarsData->mSuspensionDamage[TYRE_REAR_RIGHT] * 100;
-    gameData->damageTyre[eTYRE_FRONT_LEFT]          = m_pcarsData->mTyreWear[TYRE_FRONT_LEFT] * 100;
-    gameData->damageTyre[eTYRE_FRONT_RIGHT]         = m_pcarsData->mTyreWear[TYRE_FRONT_RIGHT] * 100;
-    gameData->damageTyre[eTYRE_REAR_LEFT]           = m_pcarsData->mTyreWear[TYRE_REAR_LEFT] * 100;
-    gameData->damageTyre[eTYRE_REAR_RIGHT]          = m_pcarsData->mTyreWear[TYRE_REAR_RIGHT] * 100;
+    data->damageAero                            = m_pcarsData->mAeroDamage * 100;
+    data->damageEngine                          = m_pcarsData->mEngineDamage * 100;
+    data->damageBrake[eTYRE_FRONT_LEFT]         = m_pcarsData->mBrakeDamage[TYRE_FRONT_LEFT] * 100;
+    data->damageBrake[eTYRE_FRONT_RIGHT]        = m_pcarsData->mBrakeDamage[TYRE_FRONT_RIGHT] * 100;
+    data->damageBrake[eTYRE_REAR_LEFT]          = m_pcarsData->mBrakeDamage[TYRE_REAR_LEFT] * 100;
+    data->damageBrake[eTYRE_REAR_RIGHT]         = m_pcarsData->mBrakeDamage[TYRE_REAR_RIGHT] * 100;
+    data->damageSuspension[eTYRE_FRONT_LEFT]    = m_pcarsData->mSuspensionDamage[TYRE_FRONT_LEFT] * 100;
+    data->damageSuspension[eTYRE_FRONT_RIGHT]   = m_pcarsData->mSuspensionDamage[TYRE_FRONT_RIGHT] * 100;
+    data->damageSuspension[eTYRE_REAR_LEFT]     = m_pcarsData->mSuspensionDamage[TYRE_REAR_LEFT] * 100;
+    data->damageSuspension[eTYRE_REAR_RIGHT]    = m_pcarsData->mSuspensionDamage[TYRE_REAR_RIGHT] * 100;
+    data->damageTyre[eTYRE_FRONT_LEFT]          = m_pcarsData->mTyreWear[TYRE_FRONT_LEFT] * 100;
+    data->damageTyre[eTYRE_FRONT_RIGHT]         = m_pcarsData->mTyreWear[TYRE_FRONT_RIGHT] * 100;
+    data->damageTyre[eTYRE_REAR_LEFT]           = m_pcarsData->mTyreWear[TYRE_REAR_LEFT] * 100;
+    data->damageTyre[eTYRE_REAR_RIGHT]          = m_pcarsData->mTyreWear[TYRE_REAR_RIGHT] * 100;
 
-    gameData->timeBestLap           = m_pcarsData->mBestLapTime;
-    gameData->timeLastLap           = m_pcarsData->mLastLapTime;
-    gameData->timeCurrentSector1    = m_pcarsData->mCurrentSector1Time;
-    gameData->timeCurrentSector2    = m_pcarsData->mCurrentSector2Time;
-    gameData->timeCurrentSector3    = m_pcarsData->mCurrentSector3Time;
-    gameData->timeFastestSector1    = m_pcarsData->mFastestSector1Time;
-    gameData->timeFastestSector2    = m_pcarsData->mFastestSector2Time;
-    gameData->timeFastestSector3    = m_pcarsData->mFastestSector3Time;
-    gameData->timeSplitAhead        = m_pcarsData->mSplitTimeAhead;
-    gameData->timeSplitBehind       = m_pcarsData->mSplitTimeBehind;
+    data->timeBestLap           = m_pcarsData->mBestLapTime;
+    data->timeLastLap           = m_pcarsData->mLastLapTime;
+    data->timeCurrentSector1    = m_pcarsData->mCurrentSector1Time;
+    data->timeCurrentSector2    = m_pcarsData->mCurrentSector2Time;
+    data->timeCurrentSector3    = m_pcarsData->mCurrentSector3Time;
+    data->timeFastestSector1    = m_pcarsData->mFastestSector1Time;
+    data->timeFastestSector2    = m_pcarsData->mFastestSector2Time;
+    data->timeFastestSector3    = m_pcarsData->mFastestSector3Time;
+    data->timeSplitAhead        = m_pcarsData->mSplitTimeAhead;
+    data->timeSplitBehind       = m_pcarsData->mSplitTimeBehind;
 
     return true;
 }
