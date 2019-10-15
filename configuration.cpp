@@ -86,6 +86,7 @@ int Configuration::getValueAsInt(QString key, bool *ok)
     }
 }
 
+
 QString Configuration::getValueAsString(QString key, bool *ok)
 {
     if( m_configMap.contains(key) )
