@@ -1,10 +1,11 @@
 #include <QCoreApplication>
 #include <iostream>
 #include <QDebug>
+#include <QThread>
 #include "configuration.h"
 #include "menue.h"
 
-
+#include "gamehelper.h"
 
 
 //static QString getConfigfile(int argc, char *argv[])
@@ -14,6 +15,25 @@
 
 //    }
 //}
+
+
+static void start(enum selectedGame gameselection) {
+
+    Game *gameInstance = GameHelper::createInstance(gameselection);
+
+    struct gamedata data;
+
+    while(true) {
+
+        if( gameInstance->isRunning() ) {
+            gameInstance->writeDataTo(&data);
+            GameHelper::print(&data);
+            QThread::msleep(500);
+
+        }
+    }
+
+}
 
 
 
@@ -37,9 +57,9 @@ int main(int argc, char *argv[])
 
     Configuration::load(configfilename);
     Configuration::printConfiguration();
-    //Configuration config(configfilename);
 
-    //config.initialize();
+    start(selected);
+
 
     return a.exec();
 }

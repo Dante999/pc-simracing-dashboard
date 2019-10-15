@@ -22,7 +22,8 @@ SOURCES += \
     serialcom.cpp \
     game_pcars/pcars.cpp \
     menue.cpp \
-    game_demo/gamedemo.cpp
+    game_demo/gamedemo.cpp \
+    gamehelper.cpp
 
 HEADERS += \
     protocol.h \
@@ -33,7 +34,8 @@ HEADERS += \
     game_pcars/pcars.h \
     game_pcars/pcarssharedmemory.h \
     menue.h \
-    game_demo/gamedemo.h
+    game_demo/gamedemo.h \
+    gamehelper.h
 
 
 SUBDIRS += \
