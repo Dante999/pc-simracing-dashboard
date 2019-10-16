@@ -46,12 +46,13 @@ enum
 // (Type#9) Car Flags (to be used with 'mCarFlags')
 enum
 {
-  eCAR_HEADLIGHT         = (1<<0),
-  eCAR_ENGINE_ACTIVE     = (1<<1),
-  eCAR_ENGINE_WARNING    = (1<<2),
-  eCAR_SPEED_LIMITER     = (1<<3),
-  eCAR_ABS               = (1<<4),
-  eCAR_HANDBRAKE         = (1<<5),
+    eCAR_HEADLIGHT         = (1<<0),
+    eCAR_RAIN_LIGHT        = (1<<1),
+    eCAR_ENGINE_ACTIVE     = (1<<2),
+    eCAR_ENGINE_WARNING    = (1<<3),
+    eCAR_SPEED_LIMITER     = (1<<4),
+    eCAR_ABS               = (1<<5),
+    eCAR_HANDBRAKE         = (1<<6),
 };
 
 struct gamedata
@@ -66,6 +67,13 @@ struct gamedata
     uint16_t speed;                         // [ UNITS = km/h ]     [ RANGE = 0 -> 65535 ]
     uint8_t fuelLevel;                      // [ UNITS = liters ]   [ RANGE = 0 -> 255 ]
     uint8_t fuelCapacity;                   // [ UNITS = liters ]   [ RANGE = 0 -> 255 ]
+
+    uint8_t brakeBias;
+
+    uint8_t tcLevel;
+    uint8_t absLevel;
+    uint8_t engineMap;
+
 
     uint16_t tempTyre[eTYRE_MAX];           // [ UNITS = celsius ]  [ RANGE = 0 -> 65535 ]
     uint16_t tempBrake[eTYRE_MAX];          // [ UNITS = celsius ]  [ RANGE = 0 -> 65535 ]

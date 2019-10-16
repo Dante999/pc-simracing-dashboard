@@ -13,10 +13,15 @@ bool GameDemo::writeDataTo(gamedata *data)
 
 
     data->maxGear = 6;
-
-
-    data->gear = data->gear % data->maxGear;
+    data->gear %= data->maxGear;
     data->gear++;
+
+    data->maxRpm = 10000;
+    data->rpm %= data->maxRpm;
+    data->rpm += 500;
+
+    data->racePosition %= 20;
+    data->racePosition++;
 
     return true;
 }

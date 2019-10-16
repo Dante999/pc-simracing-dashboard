@@ -38,4 +38,5 @@ void GameHelper::print(const gamedata *data)
     printf("Game    : %d \n", data->gameType);
     printf("--- \n");
     printf("Gear %d of %d \n", data->gear, data->maxGear);
+    printf("RPM %d of %d \n", data->rpm, data->maxRpm);
 }

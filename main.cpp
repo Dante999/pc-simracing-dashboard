@@ -23,6 +23,8 @@ static void start(enum selectedGame gameselection) {
 
     struct gamedata data;
 
+    memset(&data, 0, sizeof(data));
+
     while(true) {
 
         if( gameInstance->isRunning() ) {
