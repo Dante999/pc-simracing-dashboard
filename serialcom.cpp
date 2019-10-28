@@ -1,6 +1,5 @@
 #include "serialcom.h"
 
-
 /*******************************************************************************
  * @brief   constructor
  *
@@ -11,21 +10,19 @@
  *
  * @return  none
  *
-*******************************************************************************/
-SerialCom::SerialCom(QString portName, qint32 baudRate)
-{
-    m_state = WAITFOR_SYNC;
+ *******************************************************************************/
+SerialCom::SerialCom(QString portName, qint32 baudRate) {
+	m_state = WAITFOR_SYNC;
 
-    QSerialPort::setPortName(portName);
-    QSerialPort::setBaudRate(baudRate);
-    QSerialPort::setDataBits(QSerialPort::Data8);
-    QSerialPort::setParity(QSerialPort::NoParity);
-    QSerialPort::setStopBits(QSerialPort::OneStop);
-    QSerialPort::setFlowControl(QSerialPort::NoFlowControl);
+	QSerialPort::setPortName(portName);
+	QSerialPort::setBaudRate(baudRate);
+	QSerialPort::setDataBits(QSerialPort::Data8);
+	QSerialPort::setParity(QSerialPort::NoParity);
+	QSerialPort::setStopBits(QSerialPort::OneStop);
+	QSerialPort::setFlowControl(QSerialPort::NoFlowControl);
 
-    connect(this, SIGNAL(readyRead()), this, SLOT(parseAllReceivedBytes()));
+	connect(this, SIGNAL(readyRead()), this, SLOT(parseAllReceivedBytes()));
 }
-
 
 /*******************************************************************************
  * @brief   writes formatted data to the ComPort
@@ -36,19 +33,18 @@ SerialCom::SerialCom(QString portName, qint32 baudRate)
  *
  * @return  none
  *
-*******************************************************************************/
-void SerialCom::writeData(serialCommands cmd, uint8_t dataLength, const char *data)
-{
-    QByteArray syncByte(1, SYNC_BYTE);
-    QByteArray cmdByte(1, cmd);
-    QByteArray lengthByte(1, dataLength);    
+ *******************************************************************************/
+void SerialCom::writeData(serialCommands cmd, uint8_t dataLength,
+			  const char *data) {
+	QByteArray syncByte(1, SYNC_BYTE);
+	QByteArray cmdByte(1, cmd);
+	QByteArray lengthByte(1, dataLength);
 
-    QSerialPort::write(syncByte);
-    QSerialPort::write(cmdByte);
-    QSerialPort::write(lengthByte);
-    QSerialPort::write(data, dataLength);
+	QSerialPort::write(syncByte);
+	QSerialPort::write(cmdByte);
+	QSerialPort::write(lengthByte);
+	QSerialPort::write(data, dataLength);
 }
-
 
 /*******************************************************************************
  * @brief   parses all received bytes from the input buffer
@@ -57,65 +53,52 @@ void SerialCom::writeData(serialCommands cmd, uint8_t dataLength, const char *da
  *
  * @return  none
  *
-*******************************************************************************/
-void SerialCom::parseAllReceivedBytes()
-{
-    char byte = 0;
+ *******************************************************************************/
+void SerialCom::parseAllReceivedBytes() {
+	char byte = 0;
 
-    while(QSerialPort::bytesAvailable() > 0)
-    {
-        QSerialPort::read((char*)&byte, 1);
-        parseSingleByte(byte);
-    }
+	while (QSerialPort::bytesAvailable() > 0) {
+		QSerialPort::read((char *)&byte, 1);
+		parseSingleByte(byte);
+	}
 }
 
+void SerialCom::parseSingleByte(char byte) {
+	static uint8_t iterator = 0;
 
-void SerialCom::parseSingleByte(char byte)
-{
-    static uint8_t iterator = 0;
+	switch (m_state) {
+	case WAITFOR_SYNC:
 
-    switch(m_state)
-    {
-        case WAITFOR_SYNC:
+		if (byte == SYNC_BYTE) {
+			iterator = 0;
+			m_state  = WAITFOR_CMD;
+		}
+		break;
 
-            if( byte == SYNC_BYTE )
-            {
-                iterator = 0;
-                m_state = WAITFOR_CMD;
-            }
-            break;
+	case WAITFOR_CMD:
+		m_received.cmd = byte;
+		m_state	= WAITFOR_LENGTH;
+		break;
 
-        case WAITFOR_CMD:
-            m_received.cmd = byte;
-            m_state = WAITFOR_LENGTH;
-            break;
+	case WAITFOR_LENGTH:
+		m_received.length = byte;
+		m_state		  = WAITFOR_DATA;
+		break;
 
-        case WAITFOR_LENGTH:
-                m_received.length = byte;
-                m_state = WAITFOR_DATA;
-            break;
+	case WAITFOR_DATA:
 
-        case WAITFOR_DATA:
+		if (iterator < m_received.length) {
+			m_received.data[iterator] = byte;
+			iterator++;
+		}
 
-                if(iterator < m_received.length)
-                {
-                    m_received.data[iterator] = byte;
-                    iterator++;
-                }
+		if (iterator >= m_received.length) {
+			m_state  = WAITFOR_SYNC;
+			iterator = 0;
 
-                if(iterator >= m_received.length)
-                {
-                    m_state = WAITFOR_SYNC;
-                    iterator = 0;
+			emit parsingComplete(m_received);
+		}
 
-                    emit parsingComplete(m_received);
-                }
-
-            break;
-    }
+		break;
+	}
 }
-
-
-
-
-

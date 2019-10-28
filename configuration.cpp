@@ -1,7 +1,7 @@
 #include "configuration.h"
+#include <QDebug>
 #include <QFile>
 #include <QTextStream>
-#include <QDebug>
 
 /*
  * initialize static class members
@@ -9,112 +9,83 @@
 QString Configuration::m_filename = "";
 QMap<QString, QString> Configuration::m_configMap;
 
-
-
-
-Configuration::Configuration()
-{
-    // nothing to do
+Configuration::Configuration() {
+	// nothing to do
 }
 
+void Configuration::printConfiguration() {
+	QMapIterator<QString, QString> iter(m_configMap);
 
+	qDebug() << "------------------------";
+	qDebug() << "| configuration values |";
+	qDebug() << "------------------------";
 
-
-void Configuration::printConfiguration()
-{
-    QMapIterator<QString, QString> iter(m_configMap);
-
-    qDebug() << "------------------------";
-    qDebug() << "| configuration values |";
-    qDebug() << "------------------------";
-
-    while(iter.hasNext())
-    {
-        iter.next();
-        qDebug() << iter.key() << " : " << iter.value();
-    }
+	while (iter.hasNext()) {
+		iter.next();
+		qDebug() << iter.key() << " : " << iter.value();
+	}
 }
 
-bool Configuration::load(QString filename)
-{
-    m_filename = filename;
+bool Configuration::load(QString filename) {
+	m_filename = filename;
 
-    QFile configurationFile(m_filename);
+	QFile configurationFile(m_filename);
 
-    if( !configurationFile.open(QIODevice::ReadOnly | QIODevice::Text) )
-    {
-        qCritical() << "Unable to open configfile: " << m_filename;
-        return false;
-    }
+	if (!configurationFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		qCritical() << "Unable to open configfile: " << m_filename;
+		return false;
+	}
 
-    QTextStream configStream(&configurationFile);
+	QTextStream configStream(&configurationFile);
 
-    while( !configStream.atEnd() )
-    {
-        QString line = configStream.readLine();
+	while (!configStream.atEnd()) {
+		QString line = configStream.readLine();
 
-        if( !line.isEmpty() && !line.startsWith('#') )
-        {
-            parseLine(line);
-        }
+		if (!line.isEmpty() && !line.startsWith('#')) {
+			parseLine(line);
+		}
+	}
 
-    }
+	configurationFile.close();
 
-    configurationFile.close();
-
-    return true;
+	return true;
 }
 
-
-bool Configuration::containsValue(QString key)
-{
-    return m_configMap.contains(key);
+bool Configuration::containsValue(QString key) {
+	return m_configMap.contains(key);
 }
 
-
-int Configuration::getValueAsInt(QString key, bool *ok)
-{
-    if( m_configMap.contains(key) )
-    {
-        return m_configMap.value(key).toInt(ok);
-    }
-    else
-    {
-        qCritical() << "No value for parameter" << key << "found!";
-        *ok = false;
-        return 0;
-    }
+int Configuration::getValueAsInt(QString key, bool *ok) {
+	if (m_configMap.contains(key)) {
+		return m_configMap.value(key).toInt(ok);
+	} else {
+		qCritical() << "No value for parameter" << key << "found!";
+		*ok = false;
+		return 0;
+	}
 }
 
-
-QString Configuration::getValueAsString(QString key, bool *ok)
-{
-    if( m_configMap.contains(key) )
-    {
-        *ok = true;
-        return m_configMap.value(key);
-    }
-    else
-    {
-        *ok = false;
-        return "";
-    }
+QString Configuration::getValueAsString(QString key, bool *ok) {
+	if (m_configMap.contains(key)) {
+		*ok = true;
+		return m_configMap.value(key);
+	} else {
+		*ok = false;
+		return "";
+	}
 }
 
+void Configuration::parseLine(QString line) {
+	int index_left  = line.indexOf('=');
+	int index_right = line.length() - (index_left + 1);
 
-void Configuration::parseLine(QString line)
-{
-    int index_left  = line.indexOf('=');
-    int index_right = line.length()-(index_left+1);
+	QString key   = line.left(index_left);
+	QString value = line.right(index_right);
 
-    QString key   = line.left(index_left);
-    QString value = line.right(index_right);
+	key   = key.trimmed();
+	value = value.trimmed();
 
-    key   = key.trimmed();
-    value = value.trimmed();
+	m_configMap.insert(key, value);
 
-    m_configMap.insert(key, value);
-
-    //qDebug() << "configline:" << key << "=" << value;
+	// qDebug() << "configline:" << key << "=" << value;
 }
-

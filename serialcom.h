@@ -1,43 +1,37 @@
 #ifndef SERIALCOM_H
 #define SERIALCOM_H
 
-#include <QtSerialPort/QSerialPort>
 #include "stdint.h"
+#include <QtSerialPort/QSerialPort>
 
 #include "protocol.h"
 
+class SerialCom : public QSerialPort {
+	Q_OBJECT
 
+      private:
+	enum parseState {
+		WAITFOR_SYNC,
+		WAITFOR_CMD,
+		WAITFOR_LENGTH,
+		WAITFOR_DATA
+	};
 
-class SerialCom : public QSerialPort
-{
-    Q_OBJECT
+	parseState m_state;
+	serialPackage m_received;
 
-private:
+	void parseSingleByte(char byte);
 
-    enum parseState
-    {
-        WAITFOR_SYNC,
-        WAITFOR_CMD,
-        WAITFOR_LENGTH,
-        WAITFOR_DATA
-    };
+      public:
+	SerialCom(QString portName, qint32 baudRate = QSerialPort::Baud19200);
+	void writeData(serialCommands cmd, uint8_t dataLength,
+		       const char *data);
 
-    parseState m_state;
-    serialPackage m_received;
+      signals:
+	void parsingComplete(serialPackage dataPackage);
 
-    void parseSingleByte(char byte);
-
-public:
-
-    SerialCom(QString portName, qint32 baudRate = QSerialPort::Baud19200);
-    void writeData(serialCommands cmd, uint8_t dataLength, const char *data);
-
-signals:
-    void parsingComplete(serialPackage dataPackage);
-
-private slots:
-    void parseAllReceivedBytes();
-
+      private slots:
+	void parseAllReceivedBytes();
 };
 
 #endif // SERIALCOM_H
