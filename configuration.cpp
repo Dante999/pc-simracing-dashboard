@@ -9,9 +9,10 @@
 QString Configuration::m_filename = "";
 QMap<QString, QString> Configuration::m_configMap;
 
-Configuration::Configuration() {
-	// nothing to do
-}
+/**
+ *
+ */
+Configuration::Configuration() {}
 
 void Configuration::printConfiguration() {
 	QMapIterator<QString, QString> iter(m_configMap);
@@ -55,7 +56,7 @@ bool Configuration::containsValue(QString key) {
 	return m_configMap.contains(key);
 }
 
-int Configuration::getValueAsInt(QString key, bool *ok) {
+int Configuration::integerValue(QString key, bool *ok) {
 	if (m_configMap.contains(key)) {
 		return m_configMap.value(key).toInt(ok);
 	} else {
@@ -65,12 +66,17 @@ int Configuration::getValueAsInt(QString key, bool *ok) {
 	}
 }
 
-QString Configuration::getValueAsString(QString key, bool *ok) {
+QString Configuration::stringValue(QString key, bool *ok) {
 	if (m_configMap.contains(key)) {
-		*ok = true;
+
+		if (ok != nullptr)
+			*ok = true;
+
 		return m_configMap.value(key);
 	} else {
-		*ok = false;
+		if (ok != nullptr)
+			*ok = false;
+
 		return "";
 	}
 }
