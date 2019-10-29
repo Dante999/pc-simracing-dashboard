@@ -22,82 +22,61 @@ enum tyre {
 	eTYRE_MAX
 };
 
-// (Type#5) Flag Colours (to be used with 'mHighestFlagColour')
-enum race_flags {
-	eFLAG_COLOUR_NONE =
-	    0, // Not used for actual flags, only for some query functions
-	eFLAG_COLOUR_GREEN,  // End of danger zone, or race started
-	eFLAG_COLOUR_BLUE,   // Faster car wants to overtake the participant
-	eFLAG_COLOUR_WHITE,  // Approaching a slow car
-	eFLAG_COLOUR_YELLOW, // Danger on the racing surface itself
-	eFLAG_COLOUR_DOUBLE_YELLOW, // Danger that wholly or partly blocks the
-				    // racing surface
-	eFLAG_COLOUR_BLACK,	 // Participant disqualified
-	eFLAG_COLOUR_CHEQUERED,     // Chequered flag
-	//-------------
-	eFLAG_COLOUR_MAX
+// (Type#9) Car Flags (to be used with 'mCarFlags')
+enum car_flag1 {
+	eCAR1_HEAD_LIGHT      = (1 << 0),
+	eCAR1_RAIN_LIGHT      = (1 << 1),
+	eCAR1_INDICATOR_LEFT  = (1 << 2),
+	eCAR1_INDICATOR_RIGHT = (1 << 3),
+	eCAR1_ENGINE_ACTIVE   = (1 << 4),
+	eCAR1_ENGINE_WARNING  = (1 << 5),
 };
 
-// (Type#9) Car Flags (to be used with 'mCarFlags')
-enum car_flags {
-	eCAR_HEADLIGHT      = (1 << 0),
-	eCAR_RAIN_LIGHT     = (1 << 1),
-	eCAR_ENGINE_ACTIVE  = (1 << 2),
-	eCAR_ENGINE_WARNING = (1 << 3),
-	eCAR_SPEED_LIMITER  = (1 << 4),
-	eCAR_ABS	    = (1 << 5),
-	eCAR_HANDBRAKE      = (1 << 6),
+enum car_flag2 {
+	eCAR2_PIT_LIMITER   = (1 << 0),
+	eCAR2_TC_TRIGGERED  = (1 << 1),
+	eCAR2_ABS_TRIGGERED = (1 << 2),
+	eCAR2_HANDBRAKE     = (1 << 3),
 };
 
 struct gamedata {
 	uint8_t version = VERSION;
-	uint8_t gameType;
+	uint8_t game;
 
-	int8_t gear;	  // [ UNITS = NONE ]     [ RANGE = -128 -> +127 ]
-	int8_t maxGear;       // [ UNITS = NONE ]     [ RANGE = -128 -> +127 ]
-	uint16_t rpm;	 // [ UNITS = rpm  ]     [ RANGE = 0 -> 65535 ]
-	uint16_t maxRpm;      // [ UNITS = rpm  ]     [ RANGE = 0 -> 65535 ]
-	uint16_t speed;       // [ UNITS = km/h ]     [ RANGE = 0 -> 65535 ]
-	uint8_t fuelLevel;    // [ UNITS = liters ]   [ RANGE = 0 -> 255 ]
-	uint8_t fuelCapacity; // [ UNITS = liters ]   [ RANGE = 0 -> 255 ]
+	int8_t gear;
+	int8_t gear_max;
+	uint16_t rpm;
+	uint16_t rpm_max;
+	uint16_t speed;
+	uint8_t fuel_level;
+	uint8_t fuel_capacity;
 
-	uint8_t brakeBias;
+	uint8_t ecu_brakebias;
+	uint8_t ecu_tc;
+	uint8_t ecu_tc2;
+	uint8_t ecu_abs;
+	uint8_t ecu_enginemap;
 
-	uint8_t tcLevel;
-	uint8_t absLevel;
-	uint8_t engineMap;
+	uint16_t tmp_tyre[eTYRE_MAX];
+	uint16_t tmp_brake[eTYRE_MAX];
+	uint16_t tmp_oil;
+	uint16_t tmp_water;
 
-	uint16_t
-	    tempTyre[eTYRE_MAX]; // [ UNITS = celsius ]  [ RANGE = 0 -> 65535 ]
-	uint16_t
-	    tempBrake[eTYRE_MAX]; // [ UNITS = celsius ]  [ RANGE = 0 -> 65535 ]
-	uint16_t tempOil;	 // [ UNITS = celsius ]  [ RANGE = 0 -> 65535 ]
-	uint16_t tempWater;       // [ UNITS = celsius ]  [ RANGE = 0 -> 65535 ]
+	uint8_t dmg_aero;
+	uint8_t dmg_engine;
+	uint8_t dmg_brake[eTYRE_MAX];
+	uint8_t dmg_suspension[eTYRE_MAX];
+	uint8_t dmg_tyre[eTYRE_MAX];
 
-	uint8_t damageAero;   // [ UNITS = percent ]  [ RANGE = 0 -> 100 ]
-	uint8_t damageEngine; // [ UNITS = percent ]  [ RANGE = 0 -> 100 ]
-	uint8_t
-	    damageBrake[eTYRE_MAX]; // [ UNITS = percent ]  [ RANGE = 0 -> 100 ]
-	uint8_t damageSuspension[eTYRE_MAX]; // [ UNITS = percent ]  [ RANGE = 0
-					     // -> 100 ]
-	uint8_t
-	    damageTyre[eTYRE_MAX]; // [ UNITS = percent ]  [ RANGE = 0 -> 100 ]
+	uint8_t car_flags1;
+	uint8_t car_flags2;
 
-	uint8_t raceFlagColour; // See (Type#5) Flag Colours
-	uint8_t carFlags;       // See (Type#9) Car Flags
+	uint8_t raceposition;
 
-	uint8_t racePosition; // [ UNITS = none ]     [ RANGE = 0 -> 255 ]
-
-	float timeBestLap;
-	float timeLastLap;
-	float timeCurrentSector1;
-	float timeCurrentSector2;
-	float timeCurrentSector3;
-	float timeFastestSector1;
-	float timeFastestSector2;
-	float timeFastestSector3;
-	float timeSplitAhead;
-	float timeSplitBehind;
+	float time_bestlap;
+	float time_lastlap;
+	float time_splitahead;
+	float time_splitbehind;
 };
 
 #endif // GAMEDATA_H
