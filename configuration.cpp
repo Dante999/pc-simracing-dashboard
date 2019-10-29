@@ -9,17 +9,28 @@
 QString Configuration::m_filename = "";
 QMap<QString, QString> Configuration::m_configMap;
 
-/**
+/*******************************************************************************
+ * default constructor
  *
- */
+ * @param   none
+ *
+ * @return  none
+ ******************************************************************************/
 Configuration::Configuration() {}
 
-void Configuration::printConfiguration() {
+/*******************************************************************************
+ * prints all loaded configuration values
+ *
+ * @param   none
+ *
+ * @return  none
+ ******************************************************************************/
+void Configuration::print() {
 	QMapIterator<QString, QString> iter(m_configMap);
 
-	qDebug() << "------------------------";
+	qDebug() << "+----------------------+";
 	qDebug() << "| configuration values |";
-	qDebug() << "------------------------";
+	qDebug() << "+----------------------+";
 
 	while (iter.hasNext()) {
 		iter.next();
@@ -27,6 +38,13 @@ void Configuration::printConfiguration() {
 	}
 }
 
+/*******************************************************************************
+ * loads all configuration values from the given file
+ *
+ * @param   filename   the filepath to the configuration file
+ *
+ * @return  true if loading the values succeed, otherwise false
+ ******************************************************************************/
 bool Configuration::load(QString filename) {
 	m_filename = filename;
 
@@ -52,11 +70,26 @@ bool Configuration::load(QString filename) {
 	return true;
 }
 
-bool Configuration::containsValue(QString key) {
-	return m_configMap.contains(key);
-}
+/*******************************************************************************
+ * checks if a configuration value with the given key exists
+ *
+ * @param   key   the name of the configuration value
+ *
+ * @return  true if the value exists, otherwise false
+ ******************************************************************************/
+bool Configuration::hasValue(QString key) { return m_configMap.contains(key); }
 
-int Configuration::integerValue(QString key, bool *ok) {
+/*******************************************************************************
+ * returns the configuration value as an integer
+ *
+ * @param   key   the key of the configuration value
+ * @param   *ok   will be set to true if everything is ok, otherwise false
+ *
+ * @return  the value of the given key, could also be 0 if anything went wrong
+ ******************************************************************************/
+int Configuration::valueInteger(QString key, bool *ok) {
+
+	// TODO: Fix potential crash when *ok is a nullptr
 	if (m_configMap.contains(key)) {
 		return m_configMap.value(key).toInt(ok);
 	} else {
@@ -66,7 +99,18 @@ int Configuration::integerValue(QString key, bool *ok) {
 	}
 }
 
-QString Configuration::stringValue(QString key, bool *ok) {
+/*******************************************************************************
+ * returns the configuration value as a string
+ *
+ * @param   key   the key of the configuration value
+ * @param   *ok   will be set to true if everything is ok, otherwise false
+ *
+ * @return  the value of the given key, could also be empty if anything went
+ *          wrong
+ ******************************************************************************/
+QString Configuration::valueString(QString key, bool *ok) {
+
+	// TODO: Cleanup mess!
 	if (m_configMap.contains(key)) {
 
 		if (ok != nullptr)
@@ -81,6 +125,14 @@ QString Configuration::stringValue(QString key, bool *ok) {
 	}
 }
 
+/*******************************************************************************
+ * parses a single line of the configuration file and saves it to the internal
+ * map
+ *
+ * @param   line   a  single line of the configuration file
+ *
+ * @return  none
+ ******************************************************************************/
 void Configuration::parseLine(QString line) {
 	int index_left  = line.indexOf('=');
 	int index_right = line.length() - (index_left + 1);
@@ -92,6 +144,4 @@ void Configuration::parseLine(QString line) {
 	value = value.trimmed();
 
 	m_configMap.insert(key, value);
-
-	// qDebug() << "configline:" << key << "=" << value;
 }

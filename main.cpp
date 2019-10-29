@@ -58,10 +58,10 @@ static void start(enum selectedGame gameselection) {
 	struct gamedata data;
 	memset(&data, 0, sizeof(data));
 
-	int shdEnabled = Configuration::integerValue(CFG_SHAREDMEMORY_ENABLE);
+	int shdEnabled = Configuration::valueInteger(CFG_SHAREDMEMORY_ENABLE);
 
 	if (shdEnabled) {
-		QString key = Configuration::stringValue(CFG_SHAREDMEMORY_KEY);
+		QString key = Configuration::valueString(CFG_SHAREDMEMORY_KEY);
 
 		if (shdmemory_init(&sharedMemory, key) != 0)
 			goto end_cleanup;
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	Configuration::load(configfilename);
-	Configuration::printConfiguration();
+	Configuration::print();
 
 	start(selected);
 

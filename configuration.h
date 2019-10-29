@@ -7,15 +7,18 @@
 
 #define CFG_SHAREDMEMORY_ENABLE "sharedmemory_enable"
 #define CFG_SHAREDMEMORY_KEY "sharedmemory_key"
+#define CFG_SERIAL_PORT "serial_port"
+#define CFG_SERIAL_BAUDRATE "serial_baudrate"
+#define CFG_REFRESH_MS "refresh_ms"
 
 class Configuration {
 
       public:
-	static void printConfiguration();
+	static void print();
 	static bool load(QString filename);
-	static bool containsValue(QString key);
-	static int integerValue(QString key, bool *ok = nullptr);
-	static QString stringValue(QString key, bool *ok = nullptr);
+	static bool hasValue(QString key);
+	static int valueInteger(QString key, bool *ok = nullptr);
+	static QString valueString(QString key, bool *ok = nullptr);
 
       private:
 	Configuration();
