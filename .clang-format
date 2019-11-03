@@ -1,19 +1,24 @@
 ---
-# We'll use defaults from the LLVM style, but with 4 columns indentation.
+# Settings based on Linux Kernel recommendations
 BasedOnStyle: LLVM
 IndentWidth: 8
-UseTab: Always
+UseTab: ForIndentation
 
-#BreakBeforeBraces: Linux
-BreakBeforeBraces: Custom
-BraceWrapping:
-  AfterEnum: false
-  AfterStruct: false
-  SplitEmptyFunction: false
+BreakBeforeBraces: Linux
 
 AllowShortIfStatementsOnASingleLine: false
 IndentCaseLabels: false
 
+################################################
+# Custom Settings
+################################################
 
-# custom
+# int aaaa = 12;
+# int b    = 23;
+# int ccc  = 23;
 AlignConsecutiveAssignments: true
+
+# int         aaaa = 12;
+# float       b = 23;
+# std::string ccc = 23;
+AlignConsecutiveDeclarations: true 

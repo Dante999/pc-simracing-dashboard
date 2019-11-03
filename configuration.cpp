@@ -4,9 +4,13 @@
 #include <QTextStream>
 
 /*
- * initialize static class members
+ * the filepath to the configuration file
  */
 QString Configuration::m_filename = "";
+
+/*
+ * a map with all loaded key-value pairs from the configuration file
+ */
 QMap<QString, QString> Configuration::m_configMap;
 
 /*******************************************************************************
@@ -25,7 +29,8 @@ Configuration::Configuration() {}
  *
  * @return  none
  ******************************************************************************/
-void Configuration::print() {
+void Configuration::print()
+{
 	QMapIterator<QString, QString> iter(m_configMap);
 
 	qDebug() << "+----------------------+";
@@ -45,7 +50,8 @@ void Configuration::print() {
  *
  * @return  true if loading the values succeed, otherwise false
  ******************************************************************************/
-bool Configuration::load(QString filename) {
+bool Configuration::load(QString filename)
+{
 	m_filename = filename;
 
 	QFile configurationFile(m_filename);
@@ -60,9 +66,8 @@ bool Configuration::load(QString filename) {
 	while (!configStream.atEnd()) {
 		QString line = configStream.readLine();
 
-		if (!line.isEmpty() && !line.startsWith('#')) {
+		if (!line.isEmpty() && !line.startsWith('#'))
 			parseLine(line);
-		}
 	}
 
 	configurationFile.close();
@@ -87,16 +92,21 @@ bool Configuration::hasValue(QString key) { return m_configMap.contains(key); }
  *
  * @return  the value of the given key, could also be 0 if anything went wrong
  ******************************************************************************/
-int Configuration::valueInteger(QString key, bool *ok) {
+int Configuration::valueInteger(QString key, bool *ok)
+{
+	bool sucess = false;
+	int  value  = 0;
 
-	// TODO: Fix potential crash when *ok is a nullptr
 	if (m_configMap.contains(key)) {
-		return m_configMap.value(key).toInt(ok);
+		value = m_configMap.value(key).toInt(&sucess);
 	} else {
 		qCritical() << "No value for parameter" << key << "found!";
-		*ok = false;
-		return 0;
 	}
+
+	if (ok != nullptr)
+		*ok = sucess;
+
+	return value;
 }
 
 /*******************************************************************************
@@ -108,21 +118,22 @@ int Configuration::valueInteger(QString key, bool *ok) {
  * @return  the value of the given key, could also be empty if anything went
  *          wrong
  ******************************************************************************/
-QString Configuration::valueString(QString key, bool *ok) {
+QString Configuration::valueString(QString key, bool *ok)
+{
+	bool    sucess = false;
+	QString value  = "";
 
-	// TODO: Cleanup mess!
 	if (m_configMap.contains(key)) {
-
-		if (ok != nullptr)
-			*ok = true;
-
-		return m_configMap.value(key);
+		sucess = true;
+		value  = m_configMap.value(key);
 	} else {
-		if (ok != nullptr)
-			*ok = false;
-
-		return "";
+		qCritical() << "No value for parameter" << key << "found!";
 	}
+
+	if (ok != nullptr)
+		*ok = sucess;
+
+	return value;
 }
 
 /*******************************************************************************
@@ -133,7 +144,8 @@ QString Configuration::valueString(QString key, bool *ok) {
  *
  * @return  none
  ******************************************************************************/
-void Configuration::parseLine(QString line) {
+void Configuration::parseLine(QString line)
+{
 	int index_left  = line.indexOf('=');
 	int index_right = line.length() - (index_left + 1);
 

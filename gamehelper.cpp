@@ -6,9 +6,24 @@
 #include <iostream>
 #include <stdio.h>
 
+/*******************************************************************************
+ * default constructor
+ *
+ * @param   none
+ *
+ * @return  none
+ ******************************************************************************/
 GameHelper::GameHelper() {}
 
-Game *GameHelper::createInstance(selectedGame gametype) {
+/*******************************************************************************
+ * creates a game object of the given gametype
+ *
+ * @param   gametype    enumeration value of a gametype
+ *
+ * @return  pointer to the created game object or nullptr if the game is unkown
+ ******************************************************************************/
+Game *GameHelper::createInstance(selectedGame gametype)
+{
 
 	switch (gametype) {
 
@@ -19,9 +34,17 @@ Game *GameHelper::createInstance(selectedGame gametype) {
 	}
 }
 
-void GameHelper::print(const gamedata *data) {
+/*******************************************************************************
+ * prints the whole gamedata to the terminal
+ *
+ * @param   *data   pointer to the gamedata structure
+ *
+ * @return  none
+ ******************************************************************************/
+void GameHelper::print(const gamedata *data)
+{
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX)
 	QProcess::execute("clear");
 #elif defined(Q_OS_WIN)
 	QProcess::execute("CLS");
@@ -45,6 +68,15 @@ void GameHelper::print(const gamedata *data) {
 	printf("Rainlight %i\n", isSet(data->car_flags1, eCAR1_RAIN_LIGHT));
 }
 
-uint8_t GameHelper::isSet(uint8_t byte, uint8_t mask) {
+/*******************************************************************************
+ * little helper method to check if a bit is set in a byte
+ *
+ * @param   byte   the byte
+ * @param   mask   the bitmask
+ *
+ * @return  1 if any bit of the bitmask is set, otherwise 0
+ ******************************************************************************/
+uint8_t GameHelper::isSet(uint8_t byte, uint8_t mask)
+{
 	return (byte & mask) ? 1 : 0;
 }
